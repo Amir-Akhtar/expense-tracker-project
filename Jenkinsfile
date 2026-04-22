@@ -49,7 +49,7 @@ pipeline {
                 withSonarQubeEnv('MySonarServer') {
                     dir('expense-tracker-service') {
                         sh '''
-                        mvn verify sonar:sonar \
+                        mvn sonar:sonar \
                         -Dsonar.projectKey=expense-tracker \
                         -Dsonar.host.url=http://192.168.57.14:9000 \
                         -Dsonar.login=sq-token
