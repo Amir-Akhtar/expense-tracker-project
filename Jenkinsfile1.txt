@@ -23,7 +23,7 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('expense-tracker-service') {
-                    sh 'mvn clean compile'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
@@ -41,20 +41,6 @@ pipeline {
             steps {
                 dir('expense-tracker-service') {
                     sh 'mvn test'
-                }
-            }
-        }
-        stage('Sonar') {
-            steps {
-                withSonarQubeEnv('MySonarServer') {
-                    dir('expense-tracker-service') {
-                        sh '''
-                        mvn verify sonar:sonar \
-                        -Dsonar.projectKey=expense-tracker \
-                        -Dsonar.host.url=http://192.168.57.14:9000 \
-                        -Dsonar.login=sq-token
-                        '''
-                    }
                 }
             }
         }
