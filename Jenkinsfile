@@ -43,7 +43,7 @@ pipeline {
                     sh 'mvn test'
                 }
             }
-        }
+        }/*
         stage('Sonar') {
             steps {
                 withSonarQubeEnv('MySonarServer') {
@@ -54,6 +54,15 @@ pipeline {
                         -Dsonar.host.url=http://192.168.57.14:9000 \
                         -Dsonar.login=sq-token
                         '''
+                    }
+                }
+            }
+        }*/
+        stage ('Sonar Checks') {
+            steps {
+                withSonarQubeEnv('MySonarServer') {
+                    dir('expense-tracker-service') {
+                        sh 'mvn sonar:sonar'
                     }
                 }
             }
