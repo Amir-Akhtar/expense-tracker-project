@@ -48,11 +48,11 @@ pipeline {
 
     post {
         success {
-            echo '✅ CI Build Successful'
+            echo 'CI Build Successful'
         }
 
         failure {
-            echo '❌ CI Build Failed'
+            echo 'CI Build Failed'
         }
     }
 }
