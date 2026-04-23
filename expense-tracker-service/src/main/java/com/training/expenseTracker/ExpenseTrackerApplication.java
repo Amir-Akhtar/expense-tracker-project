@@ -1,48 +1,31 @@
-package com.training.expenseTracker;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
-@SpringBootApplication
-public class ExpenseTrackerApplication extends SpringBootServletInitializer {
+import java.util.Arrays;
 
-	@Value("${frontend.origin}")
-	public String frontendOrigin;
+@Configuration
+public class CorsGlobalConfig {
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(ExpenseTrackerApplication.class);
-	}
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
 
-	public static void main(String[] args) {
-		SpringApplication.run(ExpenseTrackerApplication.class, args);
-	}
+        config.setAllowCredentials(true);
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins(
-							"http://localhost:4200",
-							"https://expense-tracker-frontend-0g47.onrender.com"
-						)
-						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-						.allowCredentials(true);
-			}
-		};
-	}
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",
+                "https://expense-tracker-frontend-0g47.onrender.com"
+        ));
+
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
+    }
 }
-
-
-
-
-
-
