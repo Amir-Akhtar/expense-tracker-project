@@ -30,7 +30,10 @@ public class ExpenseTrackerApplication extends SpringBootServletInitializer {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:4200", frontendOrigin)
+						.allowedOrigins(
+							"http://localhost:4200",
+							"https://expense-tracker-frontend-0g47.onrender.com"
+						)
 						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 						.allowCredentials(true);
 			}
