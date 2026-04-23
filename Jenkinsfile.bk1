@@ -1,8 +1,3 @@
-environment {
-    RENDER_API_KEY = credentials('render-api-key')
-    RENDER_BACKEND_DEPLOY_HOOK = credentials('render-backend-hook')
-    RENDER_FRONTEND_DEPLOY_HOOK = credentials('render-frontend-hook')
-}
 pipeline {
     agent any
 
@@ -36,7 +31,7 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('expense-tracker-ui') {
-                    sh 'npm ci'
+                    sh 'npm install'
                     sh 'npm run build -- --configuration production'
                 }
             }
@@ -86,27 +81,6 @@ pipeline {
                 }
                 failure {
                     echo "SonarQube analysis failed during execution."
-                }
-            }
-        }
-        stage('Deploy to Render') {
-            steps {
-                script {
-                    echo "Deploying Backend..."
-                    def backendResponse = httpRequest(
-                        url: "${RENDER_BACKEND_DEPLOY_HOOK}",
-                        httpMode: 'POST',
-                        validResponseCodes: '200:299'
-                    )
-                    echo "Render Backend Deployment Response: ${backendResponse}"
-        
-                    echo "Deploying Frontend..."
-                    def frontendResponse = httpRequest(
-                        url: "${RENDER_FRONTEND_DEPLOY_HOOK}",
-                        httpMode: 'POST',
-                        validResponseCodes: '200:299'
-                    )
-                    echo "Render Frontend Deployment Response: ${frontendResponse}"
                 }
             }
         }
