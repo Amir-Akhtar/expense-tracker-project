@@ -1,7 +1,9 @@
 environment {
     RENDER_API_KEY = credentials('render-api-key')
-    RENDER_BACKEND_DEPLOY_HOOK = credentials('render-backend-hook')
-    RENDER_FRONTEND_DEPLOY_HOOK = credentials('render-frontend-hook')
+
+    RENDER_BACKEND_DEPLOY_HOOK = "https://api.render.com/deploy/srv-d7l2p2gsfn5c73cs9b0g?key=UaZzMxXX_YQ"
+    RENDER_FRONTEND_DEPLOY_HOOK = "https://api.render.com/deploy/srv-d7l20tn7f7vs73ap1uvg?key=Jf9DQVp-fpU"
+    
 }
 pipeline {
     agent any
