@@ -36,7 +36,7 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('expense-tracker-ui') {
-                    sh 'npm ci'
+                    sh 'npm install'
                     sh 'npm run build -- --configuration production'
                 }
             }
