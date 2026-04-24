@@ -1,7 +1,3 @@
-environment {
-    RENDER_BACKEND_DEPLOY_HOOK = "https://api.render.com/deploy/srv-d7l2p2gsfn5c73cs9b0g?key=UaZzMxXX_YQ"
-    RENDER_FRONTEND_DEPLOY_HOOK = "https://api.render.com/deploy/srv-d7l20tn7f7vs73ap1uvg?key=Jf9DQVp-fpU"
-}
 pipeline {
     agent any
 
@@ -12,6 +8,11 @@ pipeline {
     tools {
         maven 'mvn'
         nodejs 'node'
+    }
+
+    environment {
+        RENDER_BACKEND_DEPLOY_HOOK = "https://api.render.com/deploy/srv-d7l2p2gsfn5c73cs9b0g?key=UaZzMxXX_YQ"
+        RENDER_FRONTEND_DEPLOY_HOOK = "https://api.render.com/deploy/srv-d7l20tn7f7vs73ap1uvg?key=Jf9DQVp-fpU"
     }
 
     stages {
@@ -47,22 +48,9 @@ pipeline {
                     sh 'mvn test'
                 }
             }
-        }/*
-        stage('Sonar') {
-            steps {
-                withSonarQubeEnv('MySonarServer') {
-                    dir('expense-tracker-service') {
-                        sh '''
-                        mvn sonar:sonar \
-                        -Dsonar.projectKey=expense-tracker \
-                        -Dsonar.host.url=http://192.168.57.14:9000 \
-                        -Dsonar.login=sq-token
-                        '''
-                    }
-                }
-            }
-        }*/
-        stage ('Sonar Checks') {
+        }
+
+        stage('Sonar Checks') {
             steps {
                 withSonarQubeEnv('MySonarServer') {
                     dir('expense-tracker-service') {
@@ -70,6 +58,7 @@ pipeline {
                     }
                 }
             }
+
             post {
                 success {
                     script {
@@ -78,7 +67,7 @@ pipeline {
                             if (qualityGate.status != 'OK') {
                                 error "SonarQube Quality Gate failed: ${qualityGate.status}"
                             } else {
-                                echo " SonarQube Analysis Passed."
+                                echo "SonarQube Analysis Passed."
                             }
                         }
                     }
@@ -88,14 +77,15 @@ pipeline {
                 }
             }
         }
+
         stage('Deploy to Render') {
             steps {
                 sh """
                 echo "Deploying Backend..."
-                curl -X POST ${env.RENDER_BACKEND_DEPLOY_HOOK}
+                curl -X POST "$RENDER_BACKEND_DEPLOY_HOOK"
 
                 echo "Deploying Frontend..."
-                curl -X POST ${env.RENDER_FRONTEND_DEPLOY_HOOK}
+                curl -X POST "$RENDER_FRONTEND_DEPLOY_HOOK"
                 """
             }
         }
