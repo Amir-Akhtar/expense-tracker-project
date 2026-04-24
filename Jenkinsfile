@@ -96,19 +96,19 @@ pipeline {
                 script {
                     echo "Deploying Backend..."
                     def backendResponse = httpRequest(
-                        url: "${RENDER_BACKEND_DEPLOY_HOOK}",
+                        url: env.RENDER_BACKEND_DEPLOY_HOOK,
                         httpMode: 'POST',
                         validResponseCodes: '200:299'
                     )
-                    echo "Render Backend Deployment Response: ${backendResponse}"
-        
+                    echo "Backend Response: ${backendResponse}"
+
                     echo "Deploying Frontend..."
-                    def frontendResponse = httpRequest(
-                        url: "${RENDER_FRONTEND_DEPLOY_HOOK}",
+                    def frontendResponse = httpRequest (
+                        url: env.RENDER_FRONTEND_DEPLOY_HOOK,
                         httpMode: 'POST',
                         validResponseCodes: '200:299'
                     )
-                    echo "Render Frontend Deployment Response: ${frontendResponse}"
+                    echo "Frontend Response: ${frontendResponse}"
                 }
             }
         }
